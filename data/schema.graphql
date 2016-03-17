@@ -1,0 +1,10 @@
+type Query {
+  records: [Record]
+  record(id: Int!): Record
+}
+
+type Record {
+  id: ID
+  name: String
+  phone: String
+}
