@@ -28,7 +28,7 @@ db.bind('record');
 
 const RecordType =  new GraphQLObjectType({
   name: 'Record',
-  description: 'A address book record',
+  description: 'An address book record',
   fields: {
     id: {
       type: GraphQLID
@@ -38,6 +38,19 @@ const RecordType =  new GraphQLObjectType({
     },
     phone: {
       type: GraphQLString
+    }
+  }
+});
+
+const RecordListType = new GraphQLObjectType({
+  name: 'RecordList',
+  description: 'A list of address book record',
+  fields: {
+    count: {
+      type: GraphQLInt
+    },
+    records: {
+      type: new GraphQLList(RecordType)
     }
   }
 });
@@ -58,16 +71,29 @@ const Query = new GraphQLObjectType({
         });
       }
     },
+    recordList: {
+      type: RecordListType,
+      resolve() {
+        return new Promise((resolve, reject) => {
+          db.record.find().toArray((err, records) => {
+            if(err) {
+              reject(err);
+            }
+            resolve({ count: records.length, records });
+          });
+        });
+      }
+    },
     record: {
       type: RecordType,
       args: {
         id: {
-          type: new GraphQLNonNull(GraphQLInt)
+          type: new GraphQLNonNull(GraphQLString)
         }
       },
       resolve(_, args) {
         return new Promise((resolve, reject) => {
-          let id = args.id;
+          let id = parseInt(args.id);
           let query = { id };
           db.record.findOne(query, (err, records) => {
             if(err) {

@@ -1,5 +1,6 @@
 type Query {
   records: [Record]
+  recordList: RecordList
   record(id: Int!): Record
 }
 
@@ -7,4 +8,9 @@ type Record {
   id: ID
   name: String
   phone: String
+}
+
+type RecordList {
+  count: Int
+  records: [Record]
 }
