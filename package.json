@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node -r babel-register server.js",
+    "dev": "nodemon server.js",
     "compile": "node -r babel-register bin/compile.js",
     "update-schema": "node -r babel-register -r babel-polyfill scripts/updateSchema.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -43,6 +44,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.10.0",
     "json-loader": "^0.5.4",
+    "nodemon": "^1.9.1",
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-hot-middleware": "^2.10.0"
