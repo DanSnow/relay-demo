@@ -1,13 +1,15 @@
 type Query {
   records: [Record]
   recordList: RecordList
-  record(id: Int!): Record
+  record(id: String!): Record
 }
 
 type Record {
   id: ID
   name: String
   phone: String
+  email: String
+  country: String
 }
 
 type RecordList {

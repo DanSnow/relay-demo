@@ -38,6 +38,12 @@ const RecordType =  new GraphQLObjectType({
     },
     phone: {
       type: GraphQLString
+    },
+    email: {
+      type: GraphQLString
+    },
+    country: {
+      type: GraphQLString
     }
   }
 });
@@ -66,6 +72,9 @@ const Query = new GraphQLObjectType({
             if(err) {
               reject(err);
             }
+            records.sort((a, b) => {
+              return a.id - b.id;
+            });
             resolve(records);
           });
         });
