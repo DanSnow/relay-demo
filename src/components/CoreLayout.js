@@ -1,11 +1,18 @@
 import React from 'react';
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import theme from '../themes/light';
+
+import AppBar from './AppBar';
 
 export default class CoreLayout extends React.Component {
   render() {
     return (
-      <div>
-        { this.props.children }
-      </div>
+      <MuiThemeProvider muiTheme={ theme }>
+        <div>
+          <AppBar />
+          { this.props.children }
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
