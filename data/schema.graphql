@@ -1,3 +1,21 @@
+input AddRecordInput {
+  name: String!
+  phone: String!
+  email: String!
+  country: String!
+  clientMutationId: String!
+}
+
+type AddRecordPayload {
+  new_record: Record
+  record_list: RecordList
+  clientMutationId: String!
+}
+
+type Mutation {
+  add_record(input: AddRecordInput!): AddRecordPayload
+}
+
 type Query {
   records: [Record]
   recordList: RecordList
@@ -13,6 +31,7 @@ type Record {
 }
 
 type RecordList {
+  id: ID
   count: Int
   records: [Record]
 }

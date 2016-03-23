@@ -52,6 +52,9 @@ const RecordListType = new GraphQLObjectType({
   name: 'RecordList',
   description: 'A list of address book record',
   fields: {
+    id: {
+      type: GraphQLID
+    },
     count: {
       type: GraphQLInt
     },
@@ -88,7 +91,7 @@ const Query = new GraphQLObjectType({
             if(err) {
               reject(err);
             }
-            resolve({ count: records.length, records });
+            resolve({ id: 'recordList', count: records.length, records });
           });
         });
       }
@@ -116,8 +119,84 @@ const Query = new GraphQLObjectType({
   }
 });
 
+const AddRecordPayload = new GraphQLObjectType({
+  name: '_AddRecordPayload',
+  fields: {
+    new_record: {
+      type: RecordType
+    },
+    record_list: {
+      type: RecordListType
+    }
+  }
+});
+
+const AddRecord = mutationWithClientMutationId({
+  name: 'AddRecord',
+  inputFields: {
+    name: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    phone: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    country: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  },
+  outputFields: {
+    new_record: {
+      type: RecordType,
+      resolve(payload) {
+        return payload.new_record;
+      }
+    },
+    record_list: {
+      type: RecordListType,
+      resolve() {
+        return new Promise((resolve, reject) => {
+          db.record.find().toArray((err, records) => {
+            if(err) {
+              reject(err);
+            }
+            resolve({ id: 'recordList', count: records.length, records });
+          });
+        });
+      }
+    }
+  },
+  mutateAndGetPayload(input) {
+    return new Promise((resolve, reject) => {
+      db.record.count((err, count) => {
+        if(err) {
+          reject(err);
+        }
+        let id = count + 1;
+        let data = { id, ...input };
+        db.record.insert(data, (err) => {
+          if(err) {
+            reject(err);
+          }
+          resolve({ new_record: data });
+        });
+      });
+    });
+  }
+});
+
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    add_record: AddRecord
+  }
+});
+
 export const Schema = new GraphQLSchema({
-  query: Query
+  query: Query,
+  mutation: Mutation
 });
 
 export default Schema;
