@@ -119,18 +119,6 @@ const Query = new GraphQLObjectType({
   }
 });
 
-const AddRecordPayload = new GraphQLObjectType({
-  name: '_AddRecordPayload',
-  fields: {
-    new_record: {
-      type: RecordType
-    },
-    record_list: {
-      type: RecordListType
-    }
-  }
-});
-
 const AddRecord = mutationWithClientMutationId({
   name: 'AddRecord',
   inputFields: {
