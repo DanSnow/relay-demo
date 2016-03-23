@@ -60,7 +60,7 @@ webpackConfig.module.loaders = [{
   loader: 'babel',
   query: {
     cacheDirectory: true,
-    plugins: ['transform-runtime', __dirname + '/build/babelRelayPlugin'],
+    plugins: ['transform-runtime', 'transform-decorators-legacy', __dirname + '/build/babelRelayPlugin'],
     presets: ['es2015', 'react', 'stage-0', 'react-hmre']
   }
 },
