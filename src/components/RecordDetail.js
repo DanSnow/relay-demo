@@ -10,6 +10,8 @@ class RecordDetail extends Component {
         <h3>Detail for: { record.name }</h3>
         <ul>
           <li> Phone: { record.phone } </li>
+          <li> Email: { record.email } </li>
+          <li> Country: { record.country } </li>
         </ul>
         <Link to="/"> Back to home </Link>
       </div>
@@ -26,7 +28,9 @@ RecordDetail = Relay.createContainer(RecordDetail, {
     record: () => Relay.QL`
       fragment on Record {
         name,
-        phone
+        phone,
+        email,
+        country
       }
     `
   }
