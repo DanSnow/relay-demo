@@ -30,7 +30,7 @@ webpackConfig.entry = {
 // ------------------------------------
 webpackConfig.output = {
   filename: '[name].[hash].js',
-  path: __dirname + 'dist',
+  path: __dirname + '/dist',
   publicPath: '/'
 };
 
