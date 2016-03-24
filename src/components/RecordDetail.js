@@ -6,6 +6,7 @@ import CardActions from 'material-ui/lib/card/card-actions';
 import CardHeader from 'material-ui/lib/card/card-header';
 import CardText from 'material-ui/lib/card/card-text';
 import FlatButton from 'material-ui/lib/flat-button';
+import { AddRecordMutation } from './RecordAdd';
 
 class RecordDetail extends Component {
   render() {
@@ -57,7 +58,8 @@ export const RecordQuery = {
     query {
       record(id: $id) {
         ${Component.getFragment('record')}
-      }
+      },
+      ${AddRecordMutation.getFragment('list')}
     }
   `
 }

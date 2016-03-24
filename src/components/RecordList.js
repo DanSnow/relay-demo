@@ -6,6 +6,7 @@ import List from 'material-ui/lib/lists/list';
 import Subheader from 'material-ui/lib/Subheader';
 import ListItem from 'material-ui/lib/lists/list-item';
 import ContentForward from 'material-ui/lib/svg-icons/content/forward';
+import { AddRecordMutation } from './RecordAdd';
 
 class RecordList extends Component {
   render() {
@@ -55,7 +56,8 @@ export const RecordsQuery = {
     query {
       recordList {
         ${Component.getFragment('list')}
-      }
+      },
+      ${AddRecordMutation.getFragment('list')}
     }
   `
 }
