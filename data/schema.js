@@ -64,36 +64,41 @@ const RecordListType = new GraphQLObjectType({
   }
 });
 
+const getRecords = () => {
+  return new Promise((resolve, reject) => {
+    db.record.find().toArray((err, records) => {
+      if(err) {
+        reject(err);
+      }
+      records.sort((a, b) => {
+        return a.id - b.id;
+      });
+      resolve(records.map((record) => {
+        return { ...record, id: record.id.toString() };
+      }));
+    });
+  });
+}
+
+const getRecordList = () => {
+  return Promise.resolve(getRecords()).then((records) => {
+    return { id: 'recordList', count: records.length, records };
+  });
+};
+
 const Query = new GraphQLObjectType({
   name: 'Query',
   fields: {
     records: {
       type: new GraphQLList(RecordType),
       resolve() {
-        return new Promise((resolve, reject) => {
-          db.record.find().toArray((err, records) => {
-            if(err) {
-              reject(err);
-            }
-            records.sort((a, b) => {
-              return a.id - b.id;
-            });
-            resolve(records);
-          });
-        });
+        return getRecords();
       }
     },
     recordList: {
       type: RecordListType,
       resolve() {
-        return new Promise((resolve, reject) => {
-          db.record.find().toArray((err, records) => {
-            if(err) {
-              reject(err);
-            }
-            resolve({ id: 'recordList', count: records.length, records });
-          });
-        });
+        return getRecordList();
       }
     },
     record: {
@@ -119,6 +124,15 @@ const Query = new GraphQLObjectType({
   }
 });
 
+const RecordEdgeType = new GraphQLObjectType({
+  name: 'RecordEdge',
+  fields: {
+    node: {
+      type: RecordType
+    }
+  }
+});
+
 const AddRecord = mutationWithClientMutationId({
   name: 'AddRecord',
   inputFields: {
@@ -136,13 +150,7 @@ const AddRecord = mutationWithClientMutationId({
     }
   },
   outputFields: {
-    new_record: {
-      type: RecordType,
-      resolve(payload) {
-        return payload.new_record;
-      }
-    },
-    record_list: {
+    list: {
       type: RecordListType,
       resolve() {
         return new Promise((resolve, reject) => {
@@ -168,9 +176,11 @@ const AddRecord = mutationWithClientMutationId({
           if(err) {
             reject(err);
           }
-          resolve({ new_record: data });
+          resolve(getRecordList())
         });
-      });
+      })
+    }).then((list) => {
+      return { list };
     });
   }
 });

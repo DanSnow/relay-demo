@@ -352,19 +352,7 @@
           "description": null,
           "fields": [
             {
-              "name": "new_record",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "Record",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "record_list",
+              "name": "list",
               "description": null,
               "args": [],
               "type": {

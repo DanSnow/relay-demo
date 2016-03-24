@@ -7,8 +7,7 @@ input AddRecordInput {
 }
 
 type AddRecordPayload {
-  new_record: Record
-  record_list: RecordList
+  list: RecordList
   clientMutationId: String!
 }
 
