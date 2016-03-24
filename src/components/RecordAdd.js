@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Relay from 'react-relay';
 import { Link } from 'react-router';
+import { autobind } from 'core-decorators';
 import Paper from 'material-ui/lib/paper';
 import Card from 'material-ui/lib/card/card';
 import CardActions from 'material-ui/lib/card/card-actions';
@@ -10,6 +11,43 @@ import FlatButton from 'material-ui/lib/flat-button';
 import TextField from 'material-ui/lib/text-field';
 
 class RecordAdd extends Component {
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      name: '',
+      email: '',
+      country: '',
+      phone: ''
+    };
+  }
+
+  @autobind
+  handleNameChange(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  @autobind
+  handleEmailChange(event) {
+    this.setState({ email: event.target.value });
+  }
+
+  @autobind
+  handlePhoneChange(event) {
+    this.setState({ phone: event.target.value });
+  }
+
+  @autobind
+  handleCountryChange(event) {
+    this.setState({ country: event.target.value });
+  }
+
+  @autobind
+  handleSubmit(event) {
+    event.preventDefault();
+    Relay.Store.commitUpdate(new AddRecordMutation({ list: this.props.list, ...this.state }));
+  }
+
   render() {
     return (
       <Paper>
@@ -18,25 +56,34 @@ class RecordAdd extends Component {
           <CardActions>
             <TextField
               floatingLabelText="Name"
+              onChange={ this.handleNameChange }
             />
           </CardActions>
           <CardActions>
             <TextField
               floatingLabelText="Phone"
+              onChange={ this.handlePhoneChange }
             />
           </CardActions>
           <CardActions>
             <TextField
               floatingLabelText="Email"
+              onChange={ this.handleEmailChange }
             />
           </CardActions>
           <CardActions>
             <TextField
               floatingLabelText="Country"
+              onChange={ this.handleCountryChange }
             />
           </CardActions>
           <CardActions>
-            <FlatButton primary> Add </FlatButton>
+            <FlatButton
+              primary
+              onTouchTap={ this.handleSubmit }
+            >
+              Add
+            </FlatButton>
           </CardActions>
         </Card>
       </Paper>
@@ -48,6 +95,7 @@ RecordAdd = Relay.createContainer(RecordAdd, {
   fragments: {
     list: () => Relay.QL`
       fragment on RecordList {
+        id,
         ${AddRecordMutation.getFragment('list')}
       }
     `
@@ -78,34 +126,24 @@ export class AddRecordMutation extends Relay.Mutation {
     let { name, phone, email, country } = this.props;
     return { name, phone, email, country };
   }
+
   getFatQuery() {
     return Relay.QL`
       fragment on AddRecordPayload {
-        new_record {
+        list {
           id,
-          name,
-          country,
-          email,
-          phone
-        },
-        record_list {
-          id,
-          count
+          count,
+          records {
+            id,
+            name
+          }
         }
       }
     `
   }
   getConfigs() {
     return[{
-      type: 'RANGE_ADD',
-      parentID: this.props.list.id,
-      connectionName: 'records',
-      edgeName: 'new_record',
-      rangeBehaviors: {
-        '': 'append'
-      }
-    }, {
-      type: 'FIELD_CHANGE',
+      type: 'FIELDS_CHANGE',
       fieldIDs: {
         list: this.props.list.id
       }
@@ -114,14 +152,7 @@ export class AddRecordMutation extends Relay.Mutation {
   getOptimisticResponse() {
     let { list, name, phone, email, country } = this.props;
     return {
-      new_record: {
-        id: list.count + 1,
-        name,
-        phone,
-        email,
-        country
-      },
-      record_list: {
+      list: {
         count: list.count + 1
       }
     }
@@ -134,8 +165,7 @@ AddRecordMutation.fragments = {
       id,
       count,
       records {
-        id,
-        name
+        id
       }
     }
   `
