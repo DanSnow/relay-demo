@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Relay from 'react-relay';
-import { Link } from 'react-router';
+import { Link, withRouter } from 'react-router';
 import { autobind } from 'core-decorators';
 import Paper from 'material-ui/Paper';
 import Card from 'material-ui/Card/Card';
@@ -10,6 +10,7 @@ import CardText from 'material-ui/Card/CardText';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
+@withRouter
 class RecordAdd extends Component {
   constructor(...args) {
     super(...args);
@@ -46,6 +47,7 @@ class RecordAdd extends Component {
   handleSubmit(event) {
     event.preventDefault();
     Relay.Store.commitUpdate(new AddRecordMutation({ list: this.props.list, ...this.state }));
+    this.props.router.push('/');
   }
 
   render() {
