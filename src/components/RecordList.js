@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import Relay from 'react-relay';
 import { Link } from 'react-router';
-import Avatar from 'material-ui/lib/avatar';
-import List from 'material-ui/lib/lists/list';
-import Subheader from 'material-ui/lib/Subheader';
-import ListItem from 'material-ui/lib/lists/list-item';
-import ContentForward from 'material-ui/lib/svg-icons/content/forward';
+import Avatar from 'material-ui/Avatar';
+import List from 'material-ui/List/List';
+import Subheader from 'material-ui/Subheader';
+import ListItem from 'material-ui/List/ListItem';
+import ContentForward from 'material-ui/svg-icons/content/forward';
 import { AddRecordMutation } from './RecordAdd';
 
 class RecordList extends Component {

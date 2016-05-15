@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { IndexLink, Link } from 'react-router';
-import MuiAppBar from 'material-ui/lib/app-bar';
-import IconButton from 'material-ui/lib/icon-button';
-import FlatButton from 'material-ui/lib/flat-button';
-import ActionHome from 'material-ui/lib/svg-icons/action/home';
+import MuiAppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
+import ActionHome from 'material-ui/svg-icons/action/home';
 
 export default class AppBar extends Component {
   get homeButton() {
